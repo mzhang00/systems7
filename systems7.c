@@ -2,23 +2,23 @@
 #include <stdlib.h>
 #include <string.h>
 #include <errno.h>
-#include <fcntl.h>
 #include <unistd.h>
 
 char ** parse_args( char * line ){
-  char *curr = line;
-  return *line;
+  char ** args = malloc(sizeof(char*) * 10);
+  char * current = line;
+  int i = 0;
+  while (current != NULL) {
+    args[i] = strsep(&current, " ");
+    i++;
+  }
+  args[i] = NULL;
+  return args;
 }
 
 int main(){
-  printf("hello\n");
-  char test[] = "hello";
-  printf("%s\n", test);
-  char line[100] = "woah this is cool";
-  char *s1 = line;
-  while (s1 != NULL){
-    printf("[%s]\n", strsep( &s1, " " ));
-    printf("[%s]\n", s1);
-  }
+  char line[100] = "ls -a -l";
+  char ** args = parse_args(line);
+  execvp(args[0], args);
   return 0;
 }
